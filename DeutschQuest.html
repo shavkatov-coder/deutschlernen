@@ -1,0 +1,145 @@
+<!DOCTYPE html><html lang="uz"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>DeutschQuest</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4faf6;--cd:#fff;--ink:#12263a;--mu:#5a6e7e;--g:#1f9d55;--b:#2563eb;--r:#d64545;--ln:#d9e6de;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0f1b22;--cd:#17262f;--ink:#e8f1ee;--mu:#9fb3bd;--ln:#2a3c46}}
+:root[data-theme=dark]{--bg:#0f1b22;--cd:#17262f;--ink:#e8f1ee;--mu:#9fb3bd;--ln:#2a3c46}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:500 16px/1.5 Nunito,system-ui,sans-serif}
+main{max-width:860px;margin:0 auto;padding:12px 14px 40px}
+nav{display:flex;gap:6px;overflow-x:auto;padding:10px 14px;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5;border-bottom:1px solid var(--ln)}
+nav button{white-space:nowrap;border:0;background:transparent;color:var(--mu);font:800 14px Nunito,sans-serif;padding:8px 12px;border-radius:999px;cursor:pointer}
+nav button.on{background:var(--g);color:#fff}
+h1{font-size:28px;margin:14px 0 6px;font-weight:800}h2{font-size:20px;margin:18px 0 8px}
+.c{background:var(--cd);border:1px solid var(--ln);border-radius:18px;padding:16px;margin:10px 0}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.btn{border:0;background:var(--g);color:#fff;font:800 15px Nunito,sans-serif;padding:11px 18px;border-radius:12px;cursor:pointer;margin:3px 3px 3px 0}
+.btn.b{background:var(--b)}.btn.o{background:transparent;color:var(--ink);border:2px solid var(--ln)}.btn:disabled{opacity:.45;cursor:not-allowed}
+.opt{display:block;width:100%;text-align:left;margin:6px 0;border:2px solid var(--ln);background:var(--cd);color:var(--ink);font:700 16px Nunito,sans-serif;padding:12px;border-radius:12px;cursor:pointer}
+.opt.ok{border-color:var(--g);background:rgba(31,157,85,.15)}.opt.no{border-color:var(--r);background:rgba(214,69,69,.14)}
+.bar{height:12px;background:var(--ln);border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--g),var(--b));transition:width .4s}
+.mu{color:var(--mu);font-size:14px}.big{font-size:30px;font-weight:800}
+table{border-collapse:collapse;width:100%}td{border-bottom:1px solid var(--ln);padding:7px 6px}
+.fc{min-height:190px;text-align:center;display:flex;flex-direction:column;justify-content:center;cursor:pointer;font-size:22px}
+.fb{padding:12px;border-radius:12px;margin:10px 0}.fb.ok{background:rgba(31,157,85,.15)}.fb.no{background:rgba(214,69,69,.14)}
+input,select{font:600 16px Nunito,sans-serif;padding:10px;border:2px solid var(--ln);border-radius:10px;background:var(--cd);color:var(--ink);max-width:100%}
+.tag{display:inline-block;background:var(--ln);border-radius:99px;padding:2px 10px;font-size:13px;margin:2px}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--b);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+<nav id="nv" aria-label="Asosiy"></nav><main id="app"></main>
+<script>
+const $=id=>document.getElementById(id),sh=a=>[...a].sort(()=>Math.random()-.5),D=()=>Math.floor(Date.now()/864e5),dk=()=>new Date().toISOString().slice(0,10),INT=[0,1,3,7,16];
+let S;try{S=JSON.parse(localStorage.getItem("dq"))}catch(e){}
+S=S||{xp:0,streak:0,last:0,done:[],cards:{},th:"",lg:0,goal:30,td:"",txp:0,acc:{},perfect:0,dc:"",custom:[]};
+const save=()=>{try{localStorage.setItem("dq",JSON.stringify(S))}catch(e){}};
+const NAV=[["dash","Bosh sahifa","Dashboard","Übersicht"],["learn","Darslar","Learn","Lernen"],["vocab","Lug'at","Vocabulary","Wortschatz"],["games","O'yinlar","Games","Spiele"],["gram","Grammatika","Grammar","Grammatik"],["prog","Natijalar","Progress","Fortschritt"],["tutor","Repetitor","Tutor","Tutor"],["set","Sozlamalar","Settings","Einstellungen"]];
+const WS=`Hallo||salom||1
+Tschüss||xayr||1
+Danke||rahmat||1
+Bitte||marhamat / iltimos||1
+Ja||ha||1
+Nein||yo'q||1
+Guten Tag||xayrli kun||1
+Schüler|der|o'quvchi|Schüler|2
+Lehrer|der|o'qituvchi|Lehrer|2
+Vater|der|ota|Väter|2
+Mutter|die|ona|Mütter|2
+Bruder|der|aka / uka|Brüder|2
+Schwester|die|opa / singil|Schwestern|2
+Kind|das|bola|Kinder|2
+Freund|der|do'st|Freunde|2
+Tisch|der|stol|Tische|3
+Buch|das|kitob|Bücher|3
+Stuhl|der|stul|Stühle|3
+Haus|das|uy|Häuser|3
+Tür|die|eshik|Türen|3
+Fenster|das|deraza|Fenster|3
+Uhr|die|soat|Uhren|3
+Auto|das|mashina|Autos|3
+Schule|die|maktab|Schulen|3
+Wasser|das|suv|—|4
+Brot|das|non|Brote|4
+Apfel|der|olma|Äpfel|4
+Milch|die|sut|—|4
+Kaffee|der|qahva|Kaffees|4
+Katze|die|mushuk|Katzen|4
+Hund|der|it|Hunde|4
+Stadt|die|shahar|Städte|4
+Tag|der|kun|Tage|4
+Hand|die|qo'l|Hände|4
+Kopf|der|bosh|Köpfe|4`;
+const base=WS.split("\n").map((s,i)=>{const[de,a,uz,pl,l]=s.split("|");return{id:""+i,de,a,uz,pl,l:+l}});
+const words=()=>base.concat(S.custom||[]),full=w=>(w.a?w.a+" ":"")+w.de;
+const exs=w=>w.a?[`Das ist ${w.a=="die"?"eine":"ein"} ${w.de}.`,`Bu — ${w.uz}.`]:null;
+const PR=["ich","du","er","sie","wir","ihr"],VB={sein:["bin","bist","ist","ist","sind","seid"],haben:["habe","hast","hat","hat","haben","habt"]},TL={sein:"müde",haben:"Hunger"};
+const LS=[
+{n:1,t:"Salomlashish",x:"Nemis tilida salomlashish juda oddiy. Ismingizni aytish uchun «Ich heiße ...» deyiladi.",tb:[["Hallo","Salom"],["Guten Morgen","Xayrli tong"],["Guten Tag","Xayrli kun"],["Tschüss","Xayr"],["Danke","Rahmat"],["Bitte","Marhamat / iltimos"]],ex:[["Hallo! Ich heiße Ali.","Salom! Mening ismim Ali."],["Guten Morgen!","Xayrli tong!"],["Danke, tschüss!","Rahmat, xayr!"]],m:"«Ich bin heiße» deb aytmang. To'g'risi: «Ich heiße Ali».",q:[["«Rahmat» nemischa?",["Danke","Bitte","Tschüss"],0,"Danke — rahmat. Bitte — marhamat, Tschüss — xayr."],["Ich ___ Ali. (Mening ismim Ali)",["heiße","heißt","heißen"],0,"«ich» bilan «heiße» ishlatiladi: Ich heiße. «heißt» — er/sie uchun."],["«Xayr» nemischa?",["Hallo","Tschüss","Ja"],1,"Tschüss — xayr. Hallo — salom."]]},
+{n:2,t:"Fe'l sein (bo'lmoq)",x:"«sein» — «bo'lmoq». U o'zgaruvchi (tartibsiz) fe'l: har olmosh bilan shakli boshqacha. Qoidani yodlab oling.",tb:[["ich","bin","men"],["du","bist","sen"],["er / sie / es","ist","u"],["wir","sind","biz"],["ihr","seid","siz (sizlar)"],["sie / Sie","sind","ular / Siz"]],ex:[["Ich bin Schüler.","Men o'quvchiman."],["Du bist mein Freund.","Sen mening do'stimsan."],["Er ist Lehrer.","U o'qituvchi."]],m:"«Ich ist» yoki «Du bin» emas! Har olmoshning o'z shakli bor.",q:[["Ich ___ Schüler.",["bin","bist","ist","sind"],0,"«ich» bilan faqat «bin». bist — du uchun, ist — er/sie/es uchun, sind — wir/sie uchun."],["Du ___ mein Freund.",["bin","bist","ist","sind"],1,"«du» bilan «bist» keladi."],["Wir ___ Lehrer.",["bin","ist","sind","seid"],2,"«wir» bilan «sind». seid — ihr uchun."],["Er ___ mein Bruder.",["bist","ist","bin","sind"],1,"«er» bilan «ist» keladi."]]},
+{n:3,t:"Artikllar: der, die, das",x:"Nemis tilida har bir ot jinsga ega. Ot har doim artikl bilan yodlanadi. Noaniq artikl: ein (der va das uchun), eine (die uchun).",tb:[["der","Tisch, Vater, Lehrer"],["die","Tür, Mutter, Katze"],["das","Buch, Haus, Kind"],["ein / eine","ein Tisch, ein Buch / eine Tür"]],ex:[["Das ist ein Tisch.","Bu stol."],["Das ist eine Tür.","Bu eshik."],["Das Buch ist neu.","Kitob yangi."]],m:"«Tisch» emas — «der Tisch» deb yodlang. Jins ma'noga har doim mos kelmaydi: das Mädchen (qiz bola) — das!",q:[["___ Tisch",["der","die","das"],0,"der Tisch — stol «der» artikli bilan."],["___ Tür",["der","die","das"],1,"die Tür — eshik «die» artikli bilan."],["___ Buch",["der","die","das"],2,"das Buch — kitob «das» artikli bilan."],["Das ist ___ Katze.",["ein","eine"],1,"Katze — «die» so'zi, shuning uchun noaniq artikl «eine»."]]},
+{n:4,t:"Fe'l haben (ega bo'lmoq)",x:"«haben» — «ega bo'lmoq, bor». «Ich habe ...» — «menda ... bor». Yoshni aytishda «haben» emas, «sein» ishlatiladi: Ich bin 20 Jahre alt.",tb:[["ich","habe","menda bor"],["du","hast","sende bor"],["er / sie / es","hat","unda bor"],["wir","haben","bizda bor"],["ihr","habt","sizlarda bor"],["sie / Sie","haben","ularda / Sizda bor"]],ex:[["Ich habe eine Katze.","Menda mushuk bor."],["Du hast Hunger.","Sen ochsan."],["Wir haben Wasser.","Bizda suv bor."]],m:"«Ich habe 20 Jahre» noto'g'ri. To'g'risi: «Ich bin 20 Jahre alt».",q:[["Ich ___ Brot.",["habe","hast","hat","haben"],0,"«ich» bilan «habe»."],["Er ___ eine Katze.",["habe","hat","haben","habt"],1,"«er» bilan «hat»."],["Wir ___ Wasser.",["hat","habt","haben","hast"],2,"«wir» bilan «haben»."],["Du ___ ein Buch.",["hast","hat","habe","habt"],0,"«du» bilan «hast»."]]}];
+let V="dash",R={q:[],f:0},VF={s:"",l:"all"},ST=0;
+const T=i=>NAV.find(n=>n[0]==i)[S.lg+1];
+const bar=p=>`<div class=bar role=progressbar aria-valuenow="${Math.round(p)}"><i style="width:${Math.min(100,p)}%"></i></div>`;
+const addXP=n=>{const t=D();if(S.last!=t){S.streak=(t-S.last<=2&&S.last)?S.streak+1:1;S.last=t}if(S.td!=dk()){S.td=dk();S.txp=0}S.xp+=n;S.txp+=n;save()};
+const learn=l=>words().filter(w=>w.l==l).forEach(w=>{if(!S.cards[w.id])S.cards[w.id]={b:0,due:D()}});
+const due=()=>words().filter(w=>S.cards[w.id]&&S.cards[w.id].due<=D());
+const speak=t=>{try{const u=new SpeechSynthesisUtterance(t);u.lang="de-DE";speechSynthesis.speak(u)}catch(e){}};
+function go(v){V=v;R={q:[],f:0};render();scrollTo(0,0)}
+function render(){document.documentElement.dataset.theme=S.th;$("nv").innerHTML=NAV.map(n=>`<button class="${V==n[0]?"on":""}" onclick="go('${n[0]}')">${n[S.lg+1]}</button>`).join("");$("app").innerHTML=VW[V]()}
+/* quiz engine */
+function play(o){let i=0,sc=0,tm,left=o.timer,done=0;const m=$("app");
+const end=()=>{clearInterval(tm);const p=sc/o.qs.length,x=sc*(o.xp||5)+(p==1&&!o.timer?10:0);if(p==1&&!o.timer)S.perfect++;addXP(x);if(o.done)o.done(p);save();
+m.innerHTML=`<div class=c><h1>Natija: ${sc} / ${o.timer?i:o.qs.length}</h1><p class=big>+${x} XP</p><p>${p==1&&!o.timer?"Mukammal! +10 bonus 🎉":p>=.7?"Juda yaxshi!":"Xatolar ustida ishlang — ular eng yaxshi o'qituvchi."}</p><button class=btn onclick="go('${V}')">Orqaga</button><button class="btn o" onclick="go('prog')">Natijalar</button></div>`};
+const tick=()=>{if(o.timer){$("tm").textContent=left+" s";if(left--<=0)end()}};
+function show(){if(i>=o.qs.length)return end();const q=o.qs[i];done=0;
+m.innerHTML=`<div class=c><div class=mu>${o.title} — ${i+1}/${o.qs.length} ${o.timer?`<b id=tm></b>`:""}</div>${bar(i/o.qs.length*100)}<h2>${q.q}</h2>${q.t?`<input id=inp aria-label="Javob" autocomplete=off><button class=btn onclick="A()">Tekshirish</button>`:q.o.map((t,k)=>`<button class=opt onclick="A(${k})">${t}</button>`).join("")}<div id=fb></div></div>`;if(q.t)$("inp").focus()}
+window.A=k=>{if(done)return;done=1;const q=o.qs[i];let ok;if(q.t){const v=$("inp").value.trim().toLowerCase();ok=v==q.a}else{ok=k==q.a;const bs=document.querySelectorAll(".opt");bs.forEach((b,j)=>{b.disabled=true;if(j==q.a)b.classList.add("ok");else if(j==k)b.classList.add("no")})}
+S.acc[o.cat]=S.acc[o.cat]||[0,0];S.acc[o.cat][1]++;if(ok){sc++;S.acc[o.cat][0]++}save();
+$("fb").innerHTML=`<div class="fb ${ok?"ok":"no"}"><b>${ok?"To'g'ri! ✓":"Hali emas."}</b> ${q.w}</div><button class=btn onclick="N()">Davom etish</button>`};
+window.N=()=>{i++;show()};show();if(o.timer){tick();tm=setInterval(tick,1000)}}
+/* generators */
+const mk={
+ch:(n,P)=>sh(P).slice(0,n).map(w=>{const o=sh([w,...sh(words().filter(x=>x.uz!=w.uz)).slice(0,3)]);return{q:`${full(w)} — ma'nosi qaysi?`,o:o.map(x=>x.uz),a:o.indexOf(w),w:`${full(w)} — ${w.uz}.`}}),
+ar:(n,P)=>sh(P.filter(w=>w.a)).slice(0,n).map(w=>({q:`___ ${w.de}`,o:["der","die","das"],a:["der","die","das"].indexOf(w.a),w:`To'g'ri: ${full(w)}. So'zni har doim artikl bilan yodlang.`})),
+sc:(n,P)=>sh(P.filter(w=>!w.de.includes(" ")&&w.de.length>3)).slice(0,n).map(w=>{let l;do{l=sh(w.de.toLowerCase().split(""))}while(l.join("")==w.de.toLowerCase());return{t:1,q:`Harflardan so'z tuzing: <b>${l.join(" ")}</b> (${w.uz})`,a:w.de.toLowerCase(),w:`To'g'ri javob: ${full(w)}.`}}),
+dr:(n,v)=>Array.from({length:n},()=>{const vb=v||(Math.random()<.5?"sein":"haben"),p=Math.floor(Math.random()*6),f=VB[vb][p],o=sh([...new Set(VB[vb])]);return{q:`${PR[p][0].toUpperCase()+PR[p].slice(1)} ___ ${TL[vb]}.`,o,a:o.indexOf(f),w:`«${PR[p]}» bilan «${vb}» fe'li «${f}» shaklida keladi. Boshqa shakllar boshqa olmoshlarga mos: ${PR.map((x,j)=>x+" "+VB[vb][j]).join(", ")}.`}})};
+const pool=()=>words();
+function lesson(n){const l=LS[n-1];const m=$("app");
+m.innerHTML=`<div class=c><button class="btn o" onclick="go('learn')">← Darslar</button><h1>${l.n}. ${l.t}</h1><p>${l.x}</p><table>${l.tb.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</table><h2>Misollar</h2>${l.ex.map(e=>`<p><b>${e[0]}</b> <button class="btn o" onclick="speak('${e[0]}')" aria-label="Tinglash">🔊</button><br><span class=mu>${e[1]}</span></p>`).join("")}<div class="fb no"><b>Keng tarqalgan xato:</b> ${l.m}</div><h2>Yangi so'zlar</h2>${words().filter(w=>w.l==n).map(w=>`<span class=tag>${full(w)} — ${w.uz}</span>`).join("")}<p><button class=btn onclick="LQ(${n})">Mashq va testni boshlash</button></p></div>`}
+window.LQ=n=>{const l=LS[n-1];const qs=l.q.map(x=>({q:x[0],o:x[1],a:x[2],w:x[3]}));play({title:l.t,qs,cat:"lesson"+n,xp:10,done:p=>{if(p>=.5&&!S.done.includes(n)){S.done.push(n);learn(n)}else learn(n);save()}})};
+/* flashcards */
+window.rv=()=>{R.q=sh(due().map(w=>w.id));R.f=0;R.on=1;render()};
+window.fl=()=>{R.f=1;render()};
+window.rate=r=>{const id=R.q.shift(),c=S.cards[id];if(r=="e")c.b=Math.min(c.b+1,4);else if(r=="d")c.b=Math.max(c.b-1,0);else c.b=0;c.due=D()+INT[c.b];if(r=="r")R.q.push(id);addXP(2);R.f=0;render()};
+function review(){const id=R.q[0];if(!id)return `<div class=c><h1>Takrorlash tugadi 🎉</h1><p>Bugungi barcha kartalar ko'rib chiqildi.</p><button class=btn onclick="go('vocab')">Lug'atga qaytish</button></div>`;const w=words().find(x=>x.id==id),e=exs(w);
+return `<div class=c><div class=mu>Qoldi: ${R.q.length}</div><div class="c fc" tabindex=0 onclick="fl()" onkeydown="if(event.key=='Enter')fl()"><div class=big>${full(w)}</div>${R.f?`<div>${w.uz}</div>${w.pl&&w.pl!="—"?`<div class=mu>Ko'plik: die ${w.pl}</div>`:""}${e?`<div class=mu>${e[0]}<br>${e[1]}</div>`:""}`:`<div class=mu>Javobni ko'rish uchun bosing</div>`}</div><button class="btn o" onclick="speak('${w.de}')">🔊 Tinglash</button>${R.f?`<p><button class=btn onclick="rate('e')">Oson</button><button class="btn b" onclick="rate('d')">Qiyin</button><button class="btn o" onclick="rate('r')">Qayta ko'rish</button></p>`:`<button class=btn onclick="fl()">Javobni ko'rsatish</button>`}</div>`}
+window.addW=()=>{const de=$("nw").value.trim(),uz=$("nu").value.trim(),a=$("na").value;if(!de||!uz){alert("Nemischa so'z va tarjimani kiriting.");return}const id="c"+(S.custom.length+1+Date.now());S.custom.push({id,de,a,uz,pl:"",l:0});S.cards[id]={b:0,due:D()};save();render()};
+const weak=()=>{const e=Object.entries(S.acc).filter(([k,v])=>v[1]>=3&&v[0]/v[1]<.7).sort((a,b)=>a[1][0]/a[1][1]-b[1][0]/b[1][1])[0];return e?e[0]:null};
+const catN=k=>k.startsWith("lesson")?"Dars "+k.slice(6):({ch:"Lug'at",ar:"Artikllar",sc:"So'z tuzish",dr:"sein/haben",dq:"Kunlik topshiriq",sp:"Tezkor test"})[k]||k;
+const VW={
+dash(){const nx=LS.find(l=>!S.done.includes(l.n)),dn=due().length,lv=S.done.length>=LS.length?"A1":"A0",w=weak();
+return `<h1>Salom, Shodiyorbek!</h1><div class=c><b>Kunlik maqsad: ${Math.min(S.td==dk()?S.txp:0,S.goal)} / ${S.goal} XP</b>${bar((S.td==dk()?S.txp:0)/S.goal*100)}</div>
+<div class=g><div class=c><div class=big>${lv}</div><div class=mu>Joriy daraja</div></div><div class=c><div class=big>🔥 ${S.streak}</div><div class=mu>Kunlik seriya</div></div><div class=c><div class=big>${S.xp}</div><div class=mu>XP</div></div><div class=c><div class=big>${S.done.length}/${LS.length}</div><div class=mu>Tugatilgan darslar</div></div><div class=c><div class=big>${Object.values(S.cards).filter(c=>c.b>=2).length}</div><div class=mu>O'zlashtirilgan so'zlar</div></div><div class=c><div class=big>${dn}</div><div class=mu>Takrorlash kerak</div></div></div>
+<div class=c><h2>${nx?"Keyingi dars: "+nx.t:"Barcha darslar tugadi!"}</h2>${nx?bar(S.done.length/LS.length*100)+`<button class=btn onclick="go('learn');setTimeout(()=>lesson(${nx.n}),0)">Davom etish</button>`:""}${dn?`<button class="btn b" onclick="go('vocab');rv()">${dn} ta so'zni takrorlash</button>`:""}</div>
+<div class=c><h2>Kunlik topshiriq</h2>${S.dc==dk()?"<p>Bugungi topshiriq bajarildi ✓</p>":`<p>Lug'at va artikllardan 6 ta savol. Bajarsangiz +XP.</p><button class=btn onclick="DC()">Boshlash</button>`}</div>
+${w?`<div class=c><h2>Tavsiya</h2><p>«${catN(w)}» bo'yicha natijangiz 70% dan past. Qisqa takrorlash foydali bo'ladi.</p></div>`:""}`},
+learn(){return `<h1>Darslar</h1>`+LS.map(l=>{const ok=l.n==1||S.done.includes(l.n-1)||S.done.includes(l.n);return `<div class=c><b>${l.n}. ${l.t}</b> ${S.done.includes(l.n)?"✓":""}<br><span class=mu>${l.x.slice(0,70)}…</span><br><button class=btn ${ok?"":"disabled"} onclick="lesson(${l.n})">${ok?"Ochish":"🔒 Oldingi darsni tugating"}</button></div>`}).join("")},
+vocab(){if(R.on)return review();const dn=due().length,ws=words().filter(w=>(VF.l=="all"||w.l==VF.l)&&(w.de+w.uz).toLowerCase().includes(VF.s.toLowerCase())&&S.cards[w.id]);
+return `<h1>Mening lug'atim</h1><div class=c><b>${Object.keys(S.cards).length} ta so'z</b> · takrorlash: ${dn}<br><button class=btn onclick="rv()" ${dn?"":"disabled"}>Takrorlashni boshlash</button><p class=mu>Darsni tugatgach, yangi so'zlar shu yerga avtomatik qo'shiladi.</p></div>
+<div class=c><input placeholder="Qidirish" value="${VF.s}" oninput="VF.s=this.value;render();document.querySelector('[placeholder=Qidirish]').focus()"> <select onchange="VF.l=this.value;render()"><option value=all>Barcha mavzular</option>${LS.map(l=>`<option value=${l.n} ${VF.l==l.n?"selected":""}>${l.t}</option>`).join("")}<option value=0 ${VF.l==="0"?"selected":""}>Mening so'zlarim</option></select>
+${ws.length?`<table>${ws.map(w=>{const c=S.cards[w.id];return `<tr><td><b>${full(w)}</b> <button class="btn o" onclick="speak('${w.de}')" aria-label="Tinglash">🔊</button></td><td>${w.uz}</td><td class=mu>${w.pl&&w.pl!="—"?"pl. "+w.pl:""}</td><td>${"●".repeat(c.b+1)}</td></tr>`}).join("")}</table>`:`<p class=mu>Hozircha so'z yo'q. Birinchi darsni tugating yoki o'zingiz qo'shing.</p>`}</div>
+<div class=c><h2>O'z so'zimni qo'shish</h2><input id=nw placeholder="Nemischa"> <select id=na><option value="">artikl yo'q</option><option>der</option><option>die</option><option>das</option></select> <input id=nu placeholder="O'zbekcha"> <button class=btn onclick="addW()">Qo'shish</button></div>`},
+games(){const G=[["Javobni tanlang","4 ta variantdan to'g'ri tarjimani toping","ch"],["Artikl ustasi","der, die yoki das?","ar"],["So'z tuzish","Aralash harflardan so'z yasang","sc"],["Tezkor test","45 soniyada iloji boricha ko'p javob bering","sp"]];
+return `<h1>O'yinlar</h1><div class=g>${G.map(g=>`<div class=c><b>${g[0]}</b><p class=mu>${g[1]}</p><button class=btn onclick="PG('${g[2]}')">O'ynash</button></div>`).join("")}</div>`},
+gram(){return `<h1>Grammatika</h1>${[2,3,4].map(n=>{const l=LS[n-1];return `<div class=c><b>${l.t}</b><table>${l.tb.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</table></div>`}).join("")}<div class=c><h2>Darhol mashq</h2><p class=mu>Har javobdan keyin nega to'g'ri ekani tushuntiriladi.</p><button class=btn onclick="DR('sein')">sein</button><button class=btn onclick="DR('haben')">haben</button><button class="btn b" onclick="DR()">Aralash</button></div>`},
+prog(){const w=weak(),A=Object.entries(S.acc);const B=[["Birinchi dars",S.done.length>=1],["3 kunlik seriya",S.streak>=3],["100 XP",S.xp>=100],["Mukammal natija",S.perfect>0],["Barcha darslar",S.done.length>=LS.length]];
+return `<h1>Natijalar</h1><div class=c><h2>Darslar</h2>${LS.map(l=>`<p>${l.t} ${S.done.includes(l.n)?"✓":""}</p>`).join("")}${bar(S.done.length/LS.length*100)}</div><div class=c><h2>Aniqlik</h2>${A.length?A.map(([k,v])=>`<p>${catN(k)}: ${Math.round(v[0]/v[1]*100)}% (${v[1]} ta javob)</p>${bar(v[0]/v[1]*100)}`).join(""):"<p class=mu>Hali mashq bajarilmadi.</p>"}${w?`<p><b>Tavsiya:</b> «${catN(w)}» bo'yicha takrorlang.</p>`:""}</div><div class=c><h2>Yutuqlar</h2>${B.map(b=>`<span class=tag>${b[1]?"🏅":"🔒"} ${b[0]}</span>`).join("")}</div>`},
+tutor(){const Q=[["sein va haben farqi nima?","«sein» — bo'lmoq (Ich bin Lehrer — men o'qituvchiman). «haben» — ega bo'lmoq (Ich habe ein Buch — menda kitob bor). Yosh uchun sein: Ich bin 20 Jahre alt."],["der, die, das ni qanday tanlayman?","Qat'iy qoida yo'q. Har bir otni artikl bilan yodlang: der Tisch, die Tür, das Buch. Bu lug'atdagi kartalar uchun ham asos."],["«ich bin» nega «ich ist» emas?","«sein» fe'li har olmosh bilan o'zgaradi: ich bin, du bist, er ist. Bu tartibsiz fe'l, uni yodlash kerak."],["ein va eine farqi?","«ein» — der va das so'zlari uchun, «eine» — die so'zlari uchun: ein Tisch, ein Buch, eine Tür."]];
+return `<h1>Repetitor</h1><div class=c><p>AI repetitor hali serverga ulanmagan, shuning uchun mashq rejimi ishlaydi: savolni tanlang yoki mashq qiling.</p><p class=mu>AI kaliti xavfsizlik uchun faqat serverda saqlanishi kerak (brauzerda emas).</p></div>${Q.map(q=>`<div class=c><b>${q[0]}</b><p>${q[1]}</p></div>`).join("")}<button class=btn onclick="DR()">sein/haben mashqi</button>`},
+set(){return `<h1>Sozlamalar</h1><div class=c><p>Mavzu: <select onchange="S.th=this.value;save();render()"><option value="">Tizim</option><option value=light ${S.th=="light"?"selected":""}>Yorug'</option><option value=dark ${S.th=="dark"?"selected":""}>Qorong'i</option></select></p><p>Interfeys tili: <select onchange="S.lg=+this.value;save();render()"><option value=0 ${S.lg==0?"selected":""}>O'zbekcha</option><option value=1 ${S.lg==1?"selected":""}>English</option><option value=2 ${S.lg==2?"selected":""}>Deutsch</option></select></p><p>Kunlik maqsad: <select onchange="S.goal=+this.value;save();render()">${[20,30,50,80].map(n=>`<option ${S.goal==n?"selected":""}>${n}</option>`).join("")}</select> XP</p><p class=mu>Demo rejim: ma'lumotlar faqat shu brauzerda (localStorage) saqlanadi. Hisob va bulut saqlash keyingi bosqichda.</p><button class="btn o" onclick="if(confirm('Barcha natijalar o\\'chiriladi. Davom etasizmi?')){localStorage.removeItem('dq');location.reload()}">Natijalarni tozalash</button></div>`}};
+window.PG=k=>{const P=pool();if(k=="sp"){const q=mk.ch(40,P);return play({title:"Tezkor test",qs:q,cat:"sp",timer:45,xp:2})}play({title:{ch:"Javobni tanlang",ar:"Artikl ustasi",sc:"So'z tuzish"}[k],qs:mk[k](8,P),cat:k,xp:3})};
+window.DR=v=>play({title:"sein / haben",qs:mk.dr(8,v),cat:"dr",xp:3});
+window.DC=()=>{const P=pool();play({title:"Kunlik topshiriq",qs:sh([...mk.ch(3,P),...mk.ar(3,P)]),cat:"dq",xp:6,done:()=>{S.dc=dk();save()}})};
+window.lesson=lesson;render();
+</script></body></html>
